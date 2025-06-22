@@ -15,8 +15,12 @@ from qiskit.circuit.library import ZFeatureMap
 RANDOM_SEED = 42
 
 
-def generate_synthetic_data(num_samples: int = 1000) -> pd.DataFrame:
-    """Gera dados sintéticos simulando risco de crédito."""
+def generate_synthetic_data(num_samples: int = 10000) -> pd.DataFrame:
+    """Gera dados sintéticos simulando risco de crédito.
+
+    Os atributos seguem parâmetros comumente utilizados pelo mercado,
+    como renda, pontuação de crédito e histórico de atrasos.
+    """
     rng = np.random.default_rng(RANDOM_SEED)
     data = {
         "idade": rng.integers(18, 70, num_samples),
@@ -27,10 +31,18 @@ def generate_synthetic_data(num_samples: int = 1000) -> pd.DataFrame:
         "quant_emprestimos": rng.integers(0, 10, num_samples),
         "consultas_spc": rng.integers(0, 5, num_samples),
         "atrasos_passados": rng.integers(0, 10, num_samples),
+        "score_bureau": rng.integers(300, 851, num_samples),
+        "utilizacao_credito": rng.uniform(0, 1, num_samples),
+        "num_dependentes": rng.integers(0, 6, num_samples),
     }
     df = pd.DataFrame(data)
     prob_default = np.clip(
-        0.3 * df["divida_renda"] + 0.05 * df["consultas_spc"] + 0.1 * df["atrasos_passados"],
+        0.3 * df["divida_renda"]
+        + 0.05 * df["consultas_spc"]
+        + 0.1 * (df["atrasos_passados"] / 10)
+        + 0.2 * (1 - df["score_bureau"] / 850)
+        + 0.1 * df["utilizacao_credito"]
+        + 0.05 * (df["num_dependentes"] / 5),
         0,
         1,
     )
