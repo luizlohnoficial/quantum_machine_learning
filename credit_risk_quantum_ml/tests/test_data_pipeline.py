@@ -1,5 +1,5 @@
 import pandas as pd
-from src import data_pipeline
+from credit_risk_quantum_ml.src import data_pipeline
 
 
 def test_generate_synthetic_data_size():

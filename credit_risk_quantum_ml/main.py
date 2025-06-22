@@ -5,7 +5,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from src import data_pipeline, model_training, model_evaluation, explainability, utils
+from credit_risk_quantum_ml.src import (
+    data_pipeline,
+    model_training,
+    model_evaluation,
+    explainability,
+    utils,
+)
 
 
 def main() -> None:
