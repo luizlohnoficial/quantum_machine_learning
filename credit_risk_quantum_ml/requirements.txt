@@ -1,4 +1,5 @@
 qiskit
+qiskit-algorithms
 qiskit-machine-learning
 scikit-learn
 pandas

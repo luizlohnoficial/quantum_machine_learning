@@ -5,11 +5,15 @@ from typing import Any, Dict, Tuple
 
 import numpy as np
 from sklearn.svm import SVC
-# `qiskit.algorithms` foi descontinuado nas versões mais recentes do Qiskit
-# e os otimizadores agora residem no pacote `qiskit_algorithms`. Fazemos a
-# importação do COBYLA a partir deste novo caminho para garantir
-# compatibilidade com versões modernas da biblioteca.
-from qiskit_algorithms.optimizers import COBYLA
+# `qiskit.algorithms` foi descontinuado nas versões mais recentes do Qiskit e
+# os otimizadores passaram a residir no pacote separado `qiskit_algorithms`.
+# Tentamos importar primeiro desse caminho e, caso não exista (ambientes com
+# Qiskit mais antigo), caímos para o caminho anterior para manter
+# compatibilidade.
+try:
+    from qiskit_algorithms.optimizers import COBYLA  # type: ignore
+except ImportError:  # pragma: no cover - depende da versão instalada
+    from qiskit.algorithms.optimizers import COBYLA
 from qiskit_machine_learning.algorithms import QSVC, VQC
 from qiskit_machine_learning.neural_networks import EstimatorQNN, SamplerQNN
 from qiskit_machine_learning.connectors import TorchConnector
